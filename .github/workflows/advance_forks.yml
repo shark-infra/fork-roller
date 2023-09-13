@@ -35,3 +35,25 @@ jobs:
           github_token: ${{ secrets.WRITE_ACCESS_TOKEN }}
           branch: main
           repository: shark-infra/llvm-project
+
+  advance_stablehlo:
+    name: "Advance stablehlo"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checking out repository
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        with:
+          token: ${{ secrets.WRITE_ACCESS_TOKEN }}
+          repository: shark-infra/stablehlo
+          ref: main
+
+      - name: Pull from upstream
+        run: |
+          git remote add upstream https://github.com/openxla/stablehlo.git
+          git pull --ff-only upstream main
+      - name: Pushing changes
+        uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6 # v0.6.0
+        with:
+          github_token: ${{ secrets.WRITE_ACCESS_TOKEN }}
+          branch: main
+          repository: shark-infra/stablehlo
